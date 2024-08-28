@@ -95,7 +95,7 @@ class RoomViewSet(viewsets.ModelViewSet):
     
 
 
-
+@login_required
 def AdminDashboard(request):
     today = timezone.now().date()
     total_guest = Guest.objects.count()
@@ -109,6 +109,7 @@ def AdminDashboard(request):
     }
     return render(request, 'admin/dashboard.html',context)
 
+@login_required
 def AdminGuest(request):
     dados_guest = Guest.objects.all()
     context = {
@@ -119,6 +120,7 @@ def AdminGuest(request):
     }
     return render(request, 'admin/guest/guest.html',context)
 
+@login_required
 def AdminGuestForm(request):
     if request.method == 'POST':
         form = GuestForm(request.POST, request.FILES)
@@ -134,6 +136,7 @@ def AdminGuestForm(request):
         }
         return render(request, 'admin/guest/guest_form.html', context)
     
+@login_required   
 def AdminGuestUpdate(request, id):
     data_Guest = Guest.objects.get(id=id)
     if request.method == 'POST':
@@ -149,12 +152,14 @@ def AdminGuestUpdate(request, id):
     }
     return render(request, 'admin/guest/guest_form.html', context)
 
+
+@login_required
 def AdminGuestDelete(request, id):
     data_Guest = Guest.objects.get(id=id)
     data_Guest.delete()
     return redirect('admin-guest')
 
-
+@login_required
 def AdminRoom(request):
     dados_room = Room.objects.all()
     context = {
@@ -165,6 +170,7 @@ def AdminRoom(request):
     }
     return render(request, 'admin/room/room.html',context)
 
+@login_required
 def AdminRoomIn(request):
     dados_room = Room.objects.all()
     context = {
@@ -175,7 +181,7 @@ def AdminRoomIn(request):
     }
     return render(request, 'admin/room/room_in.html',context)
 
-
+@login_required
 def AdminRoomForm(request):
     if request.method == 'POST':
         form = RoomForm(request.POST, request.FILES)
@@ -191,6 +197,7 @@ def AdminRoomForm(request):
         }
         return render(request, 'admin/room/room_form.html', context)
     
+@login_required  
 def AdminRoomUpdate(request, id):
     data_Room = Room.objects.get(id=id)
     if request.method == 'POST':
@@ -206,13 +213,14 @@ def AdminRoomUpdate(request, id):
     }
     return render(request, 'admin/room/room_form.html', context)
 
+@login_required
 def AdminRoomDelete(request, id):
     data_Room = Room.objects.get(id=id)
     data_Room.delete()
     return redirect('admin-room')
 
 
-
+@login_required
 def AdminReservation(request):
     dados_reser = Reservation.objects.all()
     
@@ -226,7 +234,7 @@ def AdminReservation(request):
 
 from django.shortcuts import get_object_or_404, redirect
 
-
+@login_required
 def move_to_reservated(request, reservation_id):
     reservation = get_object_or_404(Reservation, id=reservation_id)
     reservations = Reservation.objects.all()  # Fetch all reservations
@@ -256,7 +264,7 @@ def move_to_reservated(request, reservation_id):
     return render(request, 'admin/reservation/reservated_report.html',context)
 
 # Ubah ke halaman yang sesuai
-
+@login_required
 def reservated_report(request):
     # Fetch all reservated entries
     reservated_entries = Reservated.objects.all()
@@ -269,7 +277,7 @@ def reservated_report(request):
     return render(request, 'admin/reservation/report.html', context)
 
 
-
+@login_required
 def AdminReservationForm(request):
     if request.method == 'POST':
         form = ReservationForm(request.POST, request.FILES)
@@ -284,7 +292,8 @@ def AdminReservationForm(request):
             'title': "Admin Reservation Form"
         }
         return render(request, 'admin/reservation/reservation_form.html', context)
-    
+
+@login_required   
 def AdminReservationUpdate(request, id):
     data_Reservation = Reservation.objects.get(id=id)
     if request.method == 'POST':
@@ -300,11 +309,13 @@ def AdminReservationUpdate(request, id):
     }
     return render(request, 'admin/reservation/reservation_form.html', context)
 
+@login_required
 def AdminReservationDelete(request, id):
     data_Reservation = Reservation.objects.get(id=id)
     data_Reservation.delete()
     return redirect('admin-reservation')
 
+@login_required
 def AdminStaff(request):
     data_roccupied = RoomOccupied.objects.all()
     context = {
