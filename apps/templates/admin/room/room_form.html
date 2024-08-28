@@ -1,0 +1,38 @@
+{% extends 'admin/home.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="content-body">
+
+    <div class="row page-titles mx-0">
+        <div class="col p-md-0">
+        </div>
+    </div>
+    <!-- row -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'admin-room' %}">Table Room</a></li>
+                            <li class="breadcrumb-item active" aria-curent="page">{{title}}</li>
+                        </ol>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">Data Table</h4>
+                        <div class="table-responsive">
+                            <form id="roomForm" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{ form|crispy }}
+                                <button type="submit" class="btn btn-primary btn-sm-2"><i class="fa fa-save"> Submit</i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

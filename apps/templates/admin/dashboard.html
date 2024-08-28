@@ -1,0 +1,50 @@
+{% extends "admin/home.html" %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <div class="col-lg-3 col-sm-6">
+                <div class="card gradient-1">
+                    <div class="card-body">
+                        <h3 class="card-title text-white">Total Guest</h3>
+                        <div class="d-inline-block">
+                            <h2 class="text-white">{{tguest}}</h2>
+                            <p class="text-white mb-0">{{today}}</p>
+                        </div>
+                        <span class="float-right display-5 opacity-5"><i class="fa fa-users"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="card gradient-2">
+                    <div class="card-body">
+                        <h3 class="card-title text-white">Total Room</h3>
+                        <div class="d-inline-block">
+                            <h2 class="text-white">{{troom}}</h2>
+                            <p class="text-white mb-0">{{today}}</p>
+                        </div>
+                        <span class="float-right display-5 opacity-5"><i class="fa fa-money"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="card gradient-3">
+                    <div class="card-body">
+                        <h3 class="card-title text-white">Total Reservated</h3>
+                        <div class="d-inline-block">
+                            <h2 class="text-white">{{reservation}}</h2>
+                            <p class="text-white mb-0">{{today}}</p>
+                        </div>
+                        <span class="float-right display-5 opacity-5"><i class="fa fa-users"></i></span>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+    
+        
+
+    </div>
+</div>
+
+{% endblock %}

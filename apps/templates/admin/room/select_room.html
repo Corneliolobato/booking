@@ -1,0 +1,18 @@
+{% extends 'admin/home.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Room Selection</h1>
+    <p>Room Number: {{ room.room_number }}</p>
+    <p>Room Type: {{ room.room_type }}</p>
+    <p>Price: {{ room.price }}</p>
+    <img src="{{ room.images.url }}" alt="Room Image" />
+
+    {% if occupied %}
+        <p class="alert alert-danger">The room is currently occupied and cannot be selected for the chosen dates.</p>
+    {% else %}
+        <p class="alert alert-success">The room is available for the selected dates.</p>
+        <a href="{% url 'book-room' room.id %}" class="btn btn-primary">Book Now</a>
+    {% endif %}
+</div>
+{% endblock %}

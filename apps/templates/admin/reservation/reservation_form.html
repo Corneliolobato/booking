@@ -1,0 +1,48 @@
+{% extends 'admin/home.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="content-body">
+
+    <div class="row page-titles mx-0">
+        <div class="col p-md-0">
+
+        </div>
+    </div>
+    <!-- row -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'admin-reservation' %}">Table Guest</a></li>
+                            <li class="breadcrumb-item active" aria-curent="page">{{title}}</li>
+                        </ol>
+                        <a class="btn btn-sm btn-outline-info" href="{% url 'admin-reservation-form' %}"><i
+                                class="fa fa-plus-square">Rejistu Guest</i></a>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">Data Table</h4>
+                        <div class="table-responsive">
+                            {% if messages %}
+                            <div class="alert alert-warning">
+                                {% for message in messages %}
+                                <p>{{ message }}</p>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{form.as_p}}
+                                <button type="submit" class="btn btn-primary btn-sm-2"><i class="fa fa-save">
+                                        Submete</i></button>
+                            </form>>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
