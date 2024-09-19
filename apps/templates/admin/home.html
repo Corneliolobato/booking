@@ -12,7 +12,7 @@
 
     <title>{{title}}</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/images/favicon.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/images/da.png' %}">
     <!-- Pignose Calender -->
     <link href="{% static 'assets/./plugins/pg-calendar/css/pignose.calendar.min.css' %}" rel="stylesheet">
     <!-- Chartist -->
@@ -22,6 +22,8 @@
     <!-- Custom Stylesheet -->
     <link href="{% static 'assets/./plugins/tables/css/datatable/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
     <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+
+
 
 </head>
 
@@ -50,24 +52,25 @@
         <!--**********************************
             Nav header start
         ***********************************-->
-        <div class="nav-header">
-            <div class="brand-logo">
-                <a href="{% url 'admin-dashboard' %}">
-                    <b class="logo-abbr"><img src="{% static 'assets/images/logo.png' %}" alt=""> </b>
-                    <span class="logo-compact"><img src="{% static 'assets/./images/logo-compact.png' %}" alt=""></span>
-                    <span class="brand-title">
-                        <img src="{% static 'assets/images/logo-text.png' %}" alt="">
-                    </span>
-                </a>
+        <div class="sidebar" id="sidebar">
+            <div class="nav-header" style="background-color: #5466ef;">
+                <div class="brand-logo">
+                    <a href="{% url 'admin-dashboard' %}">
+                        <b class="logo-abbr">
+                            <img src="{% static 'assets/images/da.png' %}" alt="">
+                        </b>
+                        <span class="brand-title text-white fw-bold">D - HOTEL TIMOR</span>
+                    </a>
+                </div>
             </div>
-        </div>
+
         <!--**********************************
             Nav header end
         ***********************************-->
         <!--**********************************
             Header start
         ***********************************-->
-    {% include 'admin/navheader.html' %}
+        {% include 'admin/navheader.html' %}
         <!--**********************************
             Header end ti-comment-alt
         ***********************************-->
@@ -83,12 +86,14 @@
         <!--**********************************
             Content body start
         ***********************************-->
+
+
         {% block content %}
         {% endblock %}
         <!--**********************************
             Content body end
         ***********************************-->
-
+    
 
         <!--**********************************
             Footer start
@@ -135,6 +140,49 @@
     <script src="{% static 'assets/./plugins/chartist/js/chartist.min.js' %}"></script>
     <script src="{% static 'assets/./plugins/chartist-plugin-tooltips/js/chartist-plugin-tooltip.min.js' %}"></script>
 
+<link href="{% static 'main/datatables/css/dataTables.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+<script src="{% static 'main/datatables/js/jquery.dataTables.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'main/datatables/js/dataTables.bootstrap4.min.js' %}" type="text/javascript"></script>
+<script>
+$(document).ready( function () {
+    var table = $('#dataTable').removeAttr('width').DataTable( {
+        "scrollY": "50vh",
+        "scrollX": false,
+        "scrollCollapse": true,
+        "paging": true,
+    });
+} );
+</script>
+
+
+<!-- check all data--------------------- -->
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="{% static 'js/jquery.js' %}"></script>
+<script>
+    var $j = jQuery.noConflict();
+
+    // check all item
+    function checkedalldata(source) {
+        var checkboxes = document.querySelectorAll('input[id="checkboxpostid"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i] != source)
+                checkboxes[i].checked = source.checked;
+        }
+    }
+
+    function performAction(actionType) {
+        var checkedItems = document.querySelectorAll('input[name="postIdList"]:checked');
+        var ids = [];
+        checkedItems.forEach(function (item) {
+            ids.push(item.value);
+        });
+        document.getElementById('actionType').value = actionType;
+        // document.getElementById('checkedItems').value = JSON.stringify(ids);
+        document.getElementById('checkedItems').value = ids.join(',');
+        document.getElementById('actionForm').submit();
+    }
+</script>
 
 
     <script src="{% static 'assets/./js/dashboard/dashboard-1.js' %}"></script>
@@ -160,9 +208,9 @@
         })(jQuery);
     </script>
 
-<script src="{% static 'assets/./plugins/tables/js/jquery.dataTables.min.js' %}"></script>
-<script src="{% static 'assets/./plugins/tables/js/datatable/dataTables.bootstrap4.min.js' %}"></script>
-<script src="{% static 'assets/./plugins/tables/js/datatable-init/datatable-basic.min.js' %}"></script>
+    <script src="{% static 'assets/./plugins/tables/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'assets/./plugins/tables/js/datatable/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'assets/./plugins/tables/js/datatable-init/datatable-basic.min.js' %}"></script>
 
 </body>
 

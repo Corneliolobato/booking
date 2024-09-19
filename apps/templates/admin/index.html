@@ -1,0 +1,35 @@
+{% extends "admin/home.html" %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <!-- End Row -->
+            <div class="row">
+                <div class="col-12 m-b-30">
+                    <h4 class="d-inline">Cards With Images</h4>
+                    <p class="text-muted">This is 3 column contents</p>
+                    <div class="row">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card">
+                                <img class="img-fluid" src="{% static 'images/big/img1.jpg' %}" alt="">
+                                <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <p class="card-text">This is a wider card with supporting text and below as a
+                                        natural
+                                        lead-in to the additional content. This content is a little bit longer.</p>
+                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Col -->
+
+                    </div>
+                </div>
+            </div>
+            <!-- End Row -->
+        </div>
+        <!-- #/ container -->
+    </div>
+</div>
+{% endblock %}

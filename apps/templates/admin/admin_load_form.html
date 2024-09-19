@@ -1,0 +1,10 @@
+{% load crispy_forms_tags %}
+
+<form method="post" action="{% url 'admin-amenity-update' objects.id %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+        <button type="submit" name="submit" class="btn btn-info">Yes</button>
+    </div>
+</form>

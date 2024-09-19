@@ -1,0 +1,23 @@
+{% load static %}
+<script src="{% static 'assets/js/jquery.js' %}"></script>
+<script>
+  var $j = jQuery.noConflict();
+
+  $j(document).ready(function() {
+    $j("#updatePost-{{data.id}}").on("click", function(e) {
+      e.preventDefault(); // Prevent default link behavior
+      var dataId = $j(this).data("id"); // Retrieve the value of data-id attribute
+      // console.log(dataId);
+      $j.ajax({
+        url: "{% url 'load-post-update-form' %}",
+        data: {
+          'objectID': dataId
+        },
+        success: function (data) {
+          $j("#laodedForm-" + dataId).html(data);
+        }
+      });
+  });
+});
+
+</script>

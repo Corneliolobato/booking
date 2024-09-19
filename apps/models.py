@@ -19,10 +19,11 @@ class Room(models.Model):
         ('available', 'Available'),
         ('occupied', 'Occupied'),
     ]
+    
     room_number = models.CharField(max_length=10)
     room_type = models.CharField(max_length=50)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=20)
+    status = models.CharField(max_length=20, choices=ROOM_STATUS_CHOICES, default='available')
     images = models.ImageField(upload_to='rooms/', null=True, blank=True)
 
     def __str__(self):
@@ -80,5 +81,20 @@ class RoomPrice(models.Model):
         return template.format(self)
     
 
+class Amenitiess(models.Model):
+    titulu = models.CharField(max_length=50)
+    deskrisaun = models.CharField(max_length=225)
+    imajen = models.ImageField(upload_to='amenity')
+    publication_date = models.DateTimeField(auto_now_add=True)
+    last_updated_date = models.DateTimeField(auto_now=True)
+    status_choices = [
+        ('draft', 'Draft'),
+        ('published', 'Published'),
+        ('scheduled', 'Scheduled'),
+    ]
+    status = models.CharField(max_length=20, choices=status_choices, default='draft')
 
     
+    def __str__(self):
+        template = '{0.titulu},{0.deskrisaun}'
+        return template.format(self)

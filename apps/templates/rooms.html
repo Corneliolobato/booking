@@ -1,0 +1,43 @@
+
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+
+    <section class="site-section">
+      <div class="container">
+        <div class="row">
+          {% for i in room %}
+        
+          <div class="col-md-4 mb-4">
+            <div class="media d-block room mb-0">
+              <figure>
+                <img src="{{i.images.url}}" alt="Generic placeholder image" class="img-fluid">
+                <div class="overlap-text">
+                </div>
+              </figure>
+              <div class="media-body">
+                <h3 class="mt-0"><a href="#">{{i.room_type}}</a></h3>
+                <ul class="room-specs">
+                  <li><span class="ion-ios-people-outline"></span> 2 Guests</li>
+                  <li><span class="ion-ios-dolar"></span>Price {{i.price}} <sup></sup></li>
+                </ul>
+                <ul class="room-specs">
+                  <li><span class="ion-ios-money"></span>Room Number {{i.room_number}} <sup></sup></li>
+                </ul>
+                <p> </p>
+                <p><a href="{% url 'detailroom' i.id %}" class="btn btn-primary btn-sm">Book Now </a></p>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+
+    <!-- END section -->
+  {% endblock %}

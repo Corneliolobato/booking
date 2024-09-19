@@ -2,58 +2,73 @@
 
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>Blog - {{title}}</title>
+  <title>{{ title }}</title>
 
-	<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <link rel="icon" href="{% static 'main/images/logo.png' %}"> -->
-	<link rel="stylesheet" href="{% static 'main/bootstrap/css/bootstrap.min.css' %}">
-	<link rel="stylesheet" href="{% static 'main/font-awesome/css/font-awesome.min.css' %}">
-	<link rel="stylesheet" href="{% static 'main/css/table-responsive.css' %}" media="screen">
-	<link href="{% static 'main/css/main.css' %}" rel="stylesheet">
-	{% block headStyle %}{% endblock %}
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-</head> 
+  <!-- Favicon -->
+  <link rel="icon" href="{% static 'main/images/logo.png' %}">
+
+  <!-- Bootstrap and FontAwesome CSS -->
+  <link rel="stylesheet" href="{% static 'main/bootstrap/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'main/font-awesome/css/font-awesome.min.css' %}">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'main/css/table-responsive.css' %}" media="screen">
+  <link href="{% static 'main/css/main.css' %}" rel="stylesheet">
+
+  <!-- Additional styles -->
+  {% block headStyle %}{% endblock %}
+</head>
+
 <body>
 
-	
-<div class="container">
-        {% block header %}
-        {% endblock %}
-    <div class="container mt-2" align="right">
-        {% if request.user.groups.all.0.name == 'admin' %}
-        <span class="bg-danger p-1 pl-2 pr-2 text-white" style="font-size: 0.7rem">P&aacute;jina Admin Geral<span/>
-        {% elif request.user.groups.all.0.name == 'operator' %}
-        <span class="bg-danger p-1 pl-2 pr-2 text-white" style="font-size: 0.7rem">P&aacute;jina Operador : {{request.user.user.firstname}} {{request.user.user.lastname}}<span/>
-        {% endif %}
+  <div class="container">
+    <!-- Header Section -->
+    {% block header %}
+    {% endblock %}
+
+    <!-- Admin or Operator Notification -->
+    <div class="container mt-2 text-right">
+      {% if request.user.groups.all.0.name == 'admin' %}
+      <span class="badge bg-danger p-2 text-white" style="font-size: 0.9rem;">
+        P&aacute;jina Admin Geral
+      </span>
+      {% elif request.user.groups.all.0.name == 'operator' %}
+      <span class="badge bg-warning p-2 text-dark" style="font-size: 0.9rem;">
+        P&aacute;jina Operador: {{ request.user.first_name }} {{ request.user.last_name }}
+      </span>
+      {% endif %}
     </div>
-	{% block content %}  
 
-	{% endblock %}
-
-</div>
-
-<footer class="footer-container text-white text-center mt-5 p-3"  style="background-color: #222420;margin-top: 20px">
-  <div class="text-light">
-  <p>&copy; Copyright 2024 | Booking Room Hotel</p>
+    <!-- Main Content Block -->
+    <div class="content mt-4">
+      {% block content %}
+      {% endblock %}
+    </div>
   </div>
-  <small class="text-light">
-    Developed by :
-    <a href="mailto:neliolobato8
-    
-    @gmail.com" target="_blank">Cornelio Lobato</a> 
-  </small>
-</footer>
-</body> 
-<!-- Optional JavaScript -->
-		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-		<script src="{% static 'main/js/jquery.min.js' %}"></script>
-        <script src="{% static 'main/bootstrap/js/bootstrap.min.js' %}"></script>
-        <script src="{% static 'main/bootstrap/js/jquery.slim.min.js' %}"></script>
-		<!-- Datatable -->
-		
-		{% block scripts %}{% endblock %}
-</html> 
+
+  <!-- Footer Section -->
+  <footer class="footer-container text-white text-center mt-5 py-3" style="background-color: hsl(225, 100%, 58%);">
+    <div>
+      <p>&copy; 2024 | Booking Room Hotel</p>
+    </div>
+    <small>
+      Developed by:
+      <a href="mailto:neliolobato8@gmail.com" class="text-light" target="_blank">Cornelio Lobato</a>
+    </small>
+  </footer>
+
+  <!-- Optional JavaScript -->
+  <script src="{% static 'main/js/jquery.min.js' %}"></script>
+  <script src="{% static 'main/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  {% block scripts %}{% endblock %}
+
+</body>
+
+</html>

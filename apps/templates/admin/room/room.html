@@ -4,6 +4,14 @@
 <div class="content-body">
     <!-- row -->
     <div class="container-fluid">
+        {% if messages %}
+        {% for message in messages %}
+        <div id="divmessage" class="alert alert-{{ message.tags }} alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{message}}
+        </div>
+        {% endfor %}
+        {% endif %}
         <div class="row">
             <div class="col-12">
                 <div class="card">

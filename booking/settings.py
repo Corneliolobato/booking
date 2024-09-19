@@ -37,9 +37,10 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     'crispy_forms',
-    'crispy_bootstrap4',
+    'crispy_bootstrap5',
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'django_summernote',
     'apps',
 
 ]
@@ -124,7 +125,7 @@ USE_TZ = True
 LOGIN_URL = 'login'
 
 #CRYSPY_TEMPLATE_PACK = 'bootstrap4'
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 
 # Static files (CSS, JavaScript, Images)
@@ -150,3 +151,15 @@ import os
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+from django.contrib.messages import constants as message_constants
+MESSAGE_TAGS = {
+        message_constants.DEBUG: 'debug',
+        message_constants.INFO: 'info',
+        message_constants.SUCCESS: 'success',
+        message_constants.WARNING: 'warning',
+        message_constants.ERROR: 'danger'
+    }

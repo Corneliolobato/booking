@@ -2,5 +2,10 @@ from django.urls import path
 from apps.views import *
 
 urlpatterns = [
-	path('', Index, name='home'),
+
+    path('',AmenitiesPost, name='post'),
+    path('D-Room/',PublicRoom, name='room'),
+    path('post-detail/<str:room_id>',room_detail,name='detailroom'),
+    path('booking-success/',booking_success, name='booking_success'),
+    
 ]

@@ -1,0 +1,30 @@
+
+{% load static %}
+<script src="{% static 'assets/js/jquery.js' %}"></script>
+<script>
+  var $j = jQuery.noConflict();
+
+  $j(document).ready(function() {
+    // Event handler untuk membuka form update
+    $j(".btn-outline-success").on("click", function(e) {
+      e.preventDefault(); // Mencegah perilaku default tombol
+      var dataId = $j(this).data("id"); // Mengambil nilai atribut data-id
+
+      // Request AJAX untuk memuat form ke dalam modal
+      $j.ajax({
+  url: "{% url 'load-amen-update-form' %}",
+  data: {
+    'objectID': dataId  // Pastikan ini mengirim ID yang benar
+  },
+  success: function(data) {
+    $j("#laodedForm-" + dataId).html(data);  // Pastikan elemen target ada di DOM
+  },
+  error: function(xhr, status, error) {
+    console.log('Error:', error);
+    console.log('Status:', status);
+  }
+});
+
+    });
+  });
+</script>

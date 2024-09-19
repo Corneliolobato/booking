@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<section class="site-section">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-4 mb-4">
+                <div class="media d-block room mb-0">
+                    <figure>
+                        <img src="{{room.images.url}}" alt="Generic placeholder image" class="img-fluid">
+                        <div class="overlap-text">
+                        </div>
+                    </figure>
+                    <div class="media-body">
+                        <h3 class="mt-0"><a href="#">{{room.room_type}}</a></h3>
+                        <ul class="room-specs">
+                            <li><span class="ion-ios-people-outline"></span> 2 Guests</li>
+                            <li><span class="ion-ios-dolar"></span>Price {{room.price}} <sup></sup></li>
+                        </ul>
+                        <ul class="room-specs">
+                            <li><span class="ion-ios-money"></span>Room Number {{room.room_number}} <sup></sup></li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row"></div>
+            <div class="col-md-6">
+                <h2 class="mb-5">Reservation Form</h2>
+                {% if room.status == 'available' %}
+                <form action="#" method="post">
+                    <div class="row">
+                
+                        <div class="col-sm-6 form-group">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit" class="btn btn-primary">Book Now</button>
+                        </div>
+
+                    </div>
+
+
+                    
+                </form>
+                {% else %}
+                <p class="text-danger">Room is currently occupied.</p>
+                {% endif %}
+            </div>
+    </div>
+</section>
+<!-- END section -->
+
+            {% endblock %}

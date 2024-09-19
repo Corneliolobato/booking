@@ -1,9 +1,9 @@
-from django.shortcuts import render,redirect
-from apps.models import Guest, Room, Reservation, Reservated, RoomOccupied
+from django.shortcuts import render,redirect,get_object_or_404
+from apps.models import Guest, Room, Reservation, Reservated, RoomOccupied, Amenitiess
 from django.utils import timezone
 from rest_framework import viewsets
 
-from apps.forms import GuestForm,RoomForm,ReservationForm,UserChangeAccountForm
+from apps.forms import GuestForm,RoomForm,ReservationForm,UserChangeAccountForm,AmenitiesForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
@@ -18,6 +18,7 @@ def Home(request):
     }
     return render(request, 'admin/home.html',context)
 
+
 def LoginPage(request):
     if  request.method == 'POST':
         username = request.POST.get('username')
@@ -27,7 +28,7 @@ def LoginPage(request):
 
         if user is not None:
                 login(request,user)
-                return redirect('admin-panel')
+                return redirect('admin-dashboard')
         else:
                 messages.error(request,'Username and Password failed please once')
 
@@ -126,6 +127,7 @@ def AdminGuestForm(request):
         form = GuestForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            messages.success(request,'Dadus Bainaka Rai ho Successfully')
         return redirect('admin-guest')
     else:
         form = GuestForm()
@@ -142,13 +144,14 @@ def AdminGuestUpdate(request, id):
     if request.method == 'POST':
         form = GuestForm(request.POST, request.FILES, instance=data_Guest)
         form.save()
+        messages.success(request,'Dadus Bainaka Atualizadu Successfully')
         return redirect('admin-guest')
     else:
         form = GuestForm(instance=data_Guest)
 
     context = {
         'title': "Formula Atualizar",
-        'form': form
+        'form': form    
     }
     return render(request, 'admin/guest/guest_form.html', context)
 
@@ -187,15 +190,18 @@ def AdminRoomForm(request):
         form = RoomForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-        return redirect('admin-room')
+            messages.success(request, 'Kamar berhasil disimpan.')
+            return redirect('admin-room')
+        else:
+            messages.error(request, 'Ada kesalahan dalam form. Mohon periksa kembali.')
     else:
         form = RoomForm()
         
-        context = {
-            'form': form,
-            'title': "Admin Room Form"
-        }
-        return render(request, 'admin/room/room_form.html', context)
+    context = {
+        'form': form,
+        'title': "Admin Room Form"
+    }
+    return render(request, 'admin/room/room_form.html', context)
     
 @login_required  
 def AdminRoomUpdate(request, id):
@@ -203,6 +209,7 @@ def AdminRoomUpdate(request, id):
     if request.method == 'POST':
         form = RoomForm(request.POST, request.FILES, instance=data_Room)
         form.save()
+        messages.success(request,'Dadus Kuartu Atualizadu Successfully')
         return redirect('admin-room')
     else:
         form = RoomForm(instance=data_Room)
@@ -218,6 +225,84 @@ def AdminRoomDelete(request, id):
     data_Room = Room.objects.get(id=id)
     data_Room.delete()
     return redirect('admin-room')
+
+
+
+
+@login_required
+def AdminAmenities(request):
+    dados_amenity = Amenitiess.objects.all()
+    context = {
+        'title': 'admin-amenities',
+        'amenity': dados_amenity,
+        'title': "Admin Amenities "
+    
+    }
+    return render(request, 'admin/amenities/amenity.html',context)
+
+@login_required
+def AdminAmenityForm(request):
+    if request.method == 'POST':
+        form = AmenitiesForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Dadus Rai ho Susesu!.')
+            return redirect('admin-amenity')
+        else:
+            messages.error(request, 'Ada kesalahan dalam form. Mohon periksa kembali.')
+    else:
+        form = AmenitiesForm()
+        
+    context = {
+        'form': form,
+        'title': "Admin Amenities Form"
+    }
+    return render(request, 'admin/amenities/amenity_form.html', context)
+    
+@login_required  
+def AdminAmenityUpdate(request, id):
+    data_amenity = Amenitiess.objects.get(id=id)
+    if request.method == 'POST':
+        form = AmenitiesForm(request.POST, request.FILES, instance=data_amenity)
+        form.save()
+        messages.success(request,'Dadus Amenity Atualizadu ho Susesu!')
+        return redirect('admin-amenity')
+    else:
+        form = AmenitiesForm(instance=data_amenity)
+
+    context = {
+        'title': "Formula Atualizar",
+        'form': form
+    }
+    return render(request, 'admin/amenities/amenity_form.html', context)
+
+@login_required
+def AdminAmenityDelete(request, id):
+    data_amenity = Amenitiess.objects.get(id=id)
+    data_amenity.delete()
+    return redirect('admin-amenity')
+
+
+
+
+@login_required
+def AdminLoadUpdateForm(request):
+	if request.method == 'GET':
+		object_id = request.GET.get('objectID')
+		objects = get_object_or_404(Amenitiess,id=object_id)
+		form = AmenitiesForm(instance=objects)
+	context = {
+		'form':form,
+		'objects':objects,
+	}
+	return render(request,'admi/admin_load_form.html',context)
+
+
+
+
+
+
+
 
 
 @login_required
@@ -263,6 +348,9 @@ def move_to_reservated(request, reservation_id):
     
     return render(request, 'admin/reservation/reservated_report.html',context)
 
+
+
+
 # Ubah ke halaman yang sesuai
 @login_required
 def reservated_report(request):
@@ -276,29 +364,53 @@ def reservated_report(request):
     
     return render(request, 'admin/reservation/report.html', context)
 
+@login_required
+def reservated_report_delete(request, id):
+    data_Reservation = Reservated.objects.get(id=id)
+    data_Reservation.delete()
+    return redirect('reservated-report')
+
 
 @login_required
+
 def AdminReservationForm(request):
     if request.method == 'POST':
         form = ReservationForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-        return redirect('admin-reservation')
+            # Save the reservation
+            reservation = form.save(commit=False)
+            room = reservation.room
+            
+            # Check if the room is still available before saving
+            if room.status == 'occupied':
+                messages.error(request, 'Kamar yang dipilih sudah dipesan.')
+                return render(request, 'admin/reservation/reservation_form.html', {'form': form, 'title': "Admin Reservation Form"})
+            
+            reservation.save()
+            
+            # Update room status to occupied
+            room.status = 'occupied'
+            room.save()
+            
+            messages.success(request, f'The Room {room.room_number} Reservated.')
+            return redirect('admin-reservation')
+        else:
+            messages.error(request, 'Ada kesalahan dalam form reservasi. Mohon periksa kembali.')
     else:
         form = ReservationForm()
         
-        context = {
-            'form': form,
-            'title': "Admin Reservation Form"
-        }
-        return render(request, 'admin/reservation/reservation_form.html', context)
-
+    context = {
+        'form': form,
+        'title': "Admin Reservation Form"
+    }
+    return render(request, 'admin/reservation/reservation_form.html', context)
 @login_required   
 def AdminReservationUpdate(request, id):
     data_Reservation = Reservation.objects.get(id=id)
     if request.method == 'POST':
         form = ReservationForm(request.POST, request.FILES, instance=data_Reservation)
         form.save()
+        messages.success(request,'Dadus Reservatsaun Atualizadu Successfully')
         return redirect('admin-reservation')
     else:
         form = ReservationForm(instance=data_Reservation)
@@ -322,3 +434,57 @@ def AdminStaff(request):
         'data_roccupied': data_roccupied
     }
     return render(request, 'admin/resepsionist/resepsionist.html',context)
+
+
+
+
+
+from django.http import JsonResponse
+import json
+
+@login_required
+def perform_amenity_action(request):
+    if request.method == 'POST':
+        # Mendapatkan data dari POST
+        checked_items = request.POST.get('checkedItems', '').strip()  # Menghilangkan spasi ekstra
+        action_type = request.POST.get('actionType')
+
+        # Cek apakah tidak ada data yang dipilih
+        if not checked_items:
+            messages.error(request, 'Oops! Ita boot seidauk hili dadus ruma.')
+            return redirect('admin-amenity')
+
+        # Split IDs hanya jika ada checked items
+        ids = checked_items.split(',')
+
+        # Proses tindakan berdasarkan tipe
+        if action_type == 'delete':
+            for i in ids:
+                data = get_object_or_404(Amenitiess, id=i)
+                data.delete()
+            messages.success(request, 'Dados Publikasaun nebe ita boot hili, Delete ona ho susesu!')
+            return redirect('admin-amenity')
+
+        elif action_type == 'publishCheckedPost':
+            for i in ids:
+                data = get_object_or_404(Amenitiess, id=i)
+                data.status = 'Published'
+                data.save()
+            messages.success(request, 'Dados Publikasaun nebe ita boot hili, publika ona ho susesu!')
+            return redirect('admin-amenity')
+
+        elif action_type == 'draftCheckedPost':
+            for i in ids:
+                data = get_object_or_404(Amenitiess, id=i)
+                data.status = 'Draft'
+                data.save()
+            messages.success(request, 'Dados Publikasaun nebe ita boot hili, draft ona ho susesu!')
+            return redirect('admin-amenity')
+
+        else:
+            return JsonResponse({'error': 'Invalid action type.'}, status=400)
+
+    else:
+        return JsonResponse({'error': 'Invalid request method.'}, status=405)
+    
+from django.http import JsonResponse
