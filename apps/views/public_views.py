@@ -77,6 +77,7 @@ def room_detail(request, room_id):
     context = {
         'form': form,
         'room': room
+        
     }
     return render(request, 'detail_room.html', context)
 

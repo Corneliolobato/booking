@@ -95,3 +95,23 @@ class ReservatedForm(forms.ModelForm):
             'check_in_date': forms.DateInput(attrs={'type': 'date'}),
             'check_out_date': forms.DateInput(attrs={'type': 'date'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        # Ambil tanggal check-in dan check-out dari kwargs jika ada
+        check_in_date = kwargs.pop('check_in_date', None)
+        check_out_date = kwargs.pop('check_out_date', None)
+        
+        super().__init__(*args, **kwargs)
+
+        # Filter kamar yang sudah dipesan
+        if check_in_date and check_out_date:
+            self.fields['room'].queryset = Room.objects.filter(
+                status='available'
+            ).exclude(
+                id__in=Reservated.objects.filter(
+                    check_in_date__lt=check_out_date,
+                    check_out_date__gt=check_in_date
+                ).values_list('room_id', flat=True)
+            )
+        else:
+            self.fields['room'].queryset = Room.objects.filter(status='available')
