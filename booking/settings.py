@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     'crispy_forms',
-    'crispy_bootstrap5',
+    'crispy_bootstrap4',
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'django_summernote',
@@ -57,6 +57,10 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
 ]
+
+#CRYSPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 
 ROOT_URLCONF = "booking.urls"
 
@@ -124,8 +128,6 @@ USE_TZ = True
 # LOGIN_REDIRECT_URL = 'IndexAdmin'
 LOGIN_URL = 'login'
 
-#CRYSPY_TEMPLATE_PACK = 'bootstrap4'
-CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 
 # Static files (CSS, JavaScript, Images)
