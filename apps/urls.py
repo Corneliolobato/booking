@@ -39,7 +39,7 @@ urlpatterns = [
     path('admin-reservation/', AdminReservation, name='admin-reservation'),
     path('move_to_reservated/<int:reservation_id>/', move_to_reservated, name='admin-move-reservated'),
     path('reservated_report/', reservated_report, name='reservated-report'),
-    path('reservated_report/<str:id>', reservated_report_delete, name='reservated-report-delete'),
+    path('reservated_report_detele/<str:id>', reservated_report_delete, name='reservated-report-delete'),
 
 
     path('admin-form-reservation/', AdminReservationForm, name='admin-reservation-form'),

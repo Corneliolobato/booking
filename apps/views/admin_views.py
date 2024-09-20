@@ -101,11 +101,13 @@ def AdminDashboard(request):
     today = timezone.now().date()
     total_guest = Guest.objects.count()
     total_room = Room.objects.count()
+    total_reservated = Reservated.objects.count()
     context = {
         'title': 'Dashboard',
         'tguest': total_guest,
         'troom': total_room,
-        'today': today
+        'today': today,
+        'treservated':total_reservated
         
     }
     return render(request, 'admin/dashboard.html',context)
@@ -366,8 +368,8 @@ def reservated_report(request):
 
 @login_required
 def reservated_report_delete(request, id):
-    data_Reservation = Reservated.objects.get(id=id)
-    data_Reservation.delete()
+    data_Reservated = Reservated.objects.get(id=id)
+    data_Reservated.delete()
     return redirect('reservated-report')
 
 

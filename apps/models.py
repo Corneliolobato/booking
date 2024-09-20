@@ -83,7 +83,7 @@ class RoomPrice(models.Model):
 
 class Amenitiess(models.Model):
     titulu = models.CharField(max_length=50)
-    deskrisaun = models.CharField(max_length=225)
+    deskrisaun = models.TextField()
     imajen = models.ImageField(upload_to='amenity')
     publication_date = models.DateTimeField(auto_now_add=True)
     last_updated_date = models.DateTimeField(auto_now=True)

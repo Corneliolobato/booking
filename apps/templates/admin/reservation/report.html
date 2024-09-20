@@ -4,10 +4,7 @@
 <div class="content-body">
     <div class="row page-titles mx-0">
         <div class="col p-md-0">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'admin-dashboard' %}">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Reservated Report</li>
-            </ol>
+
         </div>
     </div>
     <!-- row -->
@@ -16,7 +13,10 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Reservated Report</h4>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'admin-dashboard' %}">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Reservated Report</li>
+                        </ol>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -32,6 +32,7 @@
                                         <th>Price</th>
                                         <th>Check In</th>
                                         <th>Check Out</th>
+                                        <th>Aksaun</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -46,11 +47,28 @@
                                         <td>{{ entry.room.price }}</td>
                                         <td>{{ entry.check_in_date }}</td>
                                         <td>{{ entry.check_out_date }}</td>
+                                        <td>
+                                            <a class="btn btn-outline-danger btn-sm my-2" href="#" data-toggle="modal"
+                                                data-target="#delete-{{ entry.id }}">
+                                                <li class="fa fa-trash"></li>
+                                            </a>
+                                        </td>
                                     </tr>
-                                    {% empty %}
-                                    <tr>
-                                        <td colspan="9">No reservated entries found.</td>
-                                    </tr>
+                                    <div class="modal fade" id="delete-{{ entry.id }}">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    Ita-boot hakarak hamoos dadus ho naran {{entry.name}}?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger"
+                                                        data-dismiss="modal">No</button>
+                                                    <a href="{% url 'reservated-report-delete' entry.id %}"
+                                                        class="btn btn-info">Yes</a>
+                                                </div>
+                                            </div>  
+                                        </div>
+                                    </div>
                                     {% endfor %}
                                 </tbody>
                                 <tfoot>
@@ -64,6 +82,7 @@
                                         <th>Price</th>
                                         <th>Check In</th>
                                         <th>Check Out</th>
+                                        <th>Aksaun</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -76,4 +95,3 @@
     </div>
 </div>
 {% endblock %}
-
