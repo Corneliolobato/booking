@@ -30,7 +30,7 @@
                             <table class="table table-striped table-bordered zero-configuration table-hover">
                                 <thead>
                                     <tr>
-                                    
+                                        <th>No</th>
                                         <th>Name</th>
                                         <th>Sex</th>
                                         <th>Email</th>
@@ -41,6 +41,7 @@
                                 <tbody>
                                     {% for i in guest %}
                                     <tr>
+                                        <td>{{ forloop.counter }}</td>  <!-- Menampilkan nomor baris -->
                                         <td>{{i.name}}</td>
                                         <td>{{i.sex}}</td>
                                         <td>{{i.email}}</td>
@@ -67,6 +68,7 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
+                                        <th>No</th>
                                         <th>Name</th>
                                         <th>Sex</th>
                                         <th>Email</th>

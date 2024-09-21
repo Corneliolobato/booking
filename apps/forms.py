@@ -14,12 +14,11 @@ class RoomForm(forms.ModelForm):
         model = Room
         fields = ['images', 'room_number', 'room_type', 'price', 'status']
 
-    # Optional: Customizing widgets
     def __init__(self, *args, **kwargs):
         super(RoomForm, self).__init__(*args, **kwargs)
-        self.fields['status'].widget = forms.Select(choices=Room.ROOM_STATUS_CHOICES)
-        
-    # Optional: Custom validation
+        self.fields['status'].widget = forms.RadioSelect()  # Menggunakan radio button
+        self.fields['status'].choices = Room.ROOM_STATUS_CHOICES  # Menambahkan pilihan status
+
     def clean_price(self):
         price = self.cleaned_data.get('price')
         if price <= 0:
@@ -39,6 +38,7 @@ class ReservationForm(forms.ModelForm):
         label="Check Out",
         widget=DateInput(attrs={'type': 'date'})  # Use HTML5 date input
     )
+    
 
     class Meta:
         model = Reservation
@@ -46,8 +46,27 @@ class ReservationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ReservationForm, self).__init__(*args, **kwargs)
-        # Filter rooms that are available
-        self.fields['room'].queryset = Room.objects.filter(status='available')
+        
+        # Ambil tanggal check-in dan check-out dari kwargs
+        check_in_date = kwargs.get('check_in_date', None)
+        check_out_date = kwargs.get('check_out_date', None)
+        
+        # Filter kamar yang tersedia
+        available_rooms = Room.objects.filter(status='available')
+        # Menambahkan pilihan default
+        self.fields['room'].empty_label = "------Hili Kuartu-------"  # Label untuk pilihan default
+
+
+        if check_in_date and check_out_date:
+            unavailable_rooms = Reservation.objects.filter(
+                check_in_date__lt=check_out_date,
+                check_out_date__gt=check_in_date
+            ).values_list('room_id', flat=True)
+
+            # Hapus kamar yang sudah dipesan dari queryset
+            available_rooms = available_rooms.exclude(id__in=unavailable_rooms)
+
+        self.fields['room'].queryset = available_rooms
 
     def clean(self):
         cleaned_data = super().clean()
@@ -57,11 +76,10 @@ class ReservationForm(forms.ModelForm):
 
         # Ensure check-in date is before check-out date
         if check_in_date and check_out_date and check_in_date >= check_out_date:
-            self.add_error('check_out_date', 'Tanggal check-out harus setelah tanggal check-in.')
+            self.add_error('check_out_date', 'Hili data iha check_in nia oin!.')
 
         # Ensure room is available
         if room:
-            # Check for overlapping reservations
             overlapping_reservations = Reservation.objects.filter(
                 room=room,
                 check_in_date__lt=check_out_date,
@@ -87,10 +105,14 @@ class AmenitiesForm(forms.ModelForm):
         fields = ['titulu','deskrisaun','imajen']
 
 
+
+
+# public fields bookings
+
 class ReservatedForm(forms.ModelForm):
     class Meta:
         model = Reservated
-        fields = ['name', 'sex', 'email', 'phone', 'room', 'check_in_date', 'check_out_date']
+        exclude = ['room']  # Hilangkan room dari form karena akan otomatis diisi dari view
         widgets = {
             'check_in_date': forms.DateInput(attrs={'type': 'date'}),
             'check_out_date': forms.DateInput(attrs={'type': 'date'}),
@@ -113,5 +135,3 @@ class ReservatedForm(forms.ModelForm):
                     check_out_date__gt=check_in_date
                 ).values_list('room_id', flat=True)
             )
-        else:
-            self.fields['room'].queryset = Room.objects.filter(status='available')

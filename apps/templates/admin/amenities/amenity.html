@@ -33,9 +33,9 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-center"><input type="checkbox" onclick="checkedalldata(this);" /></th>
+                                                <th>No</th>
                                                 <th>Imajen</th>
                                                 <th>Titulu</th>
-
                                                 <th>Data Publikasaun</th>
                                                 <th>Publikasaun Ikus</th>
                                                 <th>Status</th>
@@ -45,9 +45,11 @@
                                         <tbody>
                                             {% for i in amenity %}
                                             <tr>
-                                                <td class="text-center"><input id="checkboxpostid" type="checkbox"
-                                                        name="postIdList" value="{{i.id}}"></td>
+                                                
+                                                <td class="text-center"><input id="checkboxpostid" type="checkbox" name="postIdList" value="{{i.id}}"></td>
+                                                <td>{{ forloop.counter }}</td>  <!-- Menampilkan nomor baris -->
                                                 <td> <img src="{{ i.imajen.url }}" style="width: 50px;" alt=""></td>
+                                                
                                                 <td>{{i.titulu}}</td>
 
                                                 <td width="15%">{{i.publication_date|date:"d-M-Y"}}</td>

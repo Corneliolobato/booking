@@ -14,6 +14,7 @@ class Guest(models.Model):
 
 from django.db import models
 
+
 class Room(models.Model):
     ROOM_STATUS_CHOICES = [
         ('available', 'Available'),
@@ -23,7 +24,7 @@ class Room(models.Model):
     room_number = models.CharField(max_length=10)
     room_type = models.CharField(max_length=50)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=20, choices=ROOM_STATUS_CHOICES, default='available')
+    status = models.CharField(max_length=10, choices=ROOM_STATUS_CHOICES)
     images = models.ImageField(upload_to='rooms/', null=True, blank=True)
 
     def __str__(self):
@@ -42,11 +43,10 @@ class Reservation(models.Model):
     
 class Reservated(models.Model):
     name = models.CharField(max_length=100)
-    sex_choices = [('Male', 'Male'), ('Female', 'Female')]
-    sex = models.CharField(max_length=10, choices=sex_choices, default='male')
+    sex = models.CharField(max_length=10)
     email = models.EmailField()
     phone = models.CharField(max_length=15)
-    room = models.ForeignKey('Room', on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)  # Harus ada ForeignKey ke Room
     check_in_date = models.DateField()
     check_out_date = models.DateField()
 

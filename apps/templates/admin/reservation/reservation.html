@@ -28,11 +28,12 @@
                                 class="fa fa-plus-square">Rejistu Reservation</i></a>
                     </div>
                     <div class="card-body">
-                        <h4 class="card-title">Data Table</h4>
+
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered zero-configuration">
                                 <thead>
                                     <tr>
+                                        <th>No</th>
                                         <th>Name</th>
                                         <th>Sex</th>
                                         <th>Email</th>
@@ -49,6 +50,7 @@
                                 <tbody>
                                     {% for i in reservation %}
                                     <tr>
+                                        <td>{{ forloop.counter }}</td>  <!-- Menampilkan nomor baris -->
                                         <td>{{i.guest.name}}</td>
                                         <td>{{i.guest.sex}}</td>
                                         <td>{{i.guest.email}}</td>
@@ -83,6 +85,7 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
+                                        <th>No</th>
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Phone</th>
