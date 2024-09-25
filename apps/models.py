@@ -41,7 +41,19 @@ class Reservation(models.Model):
         template = '{0.check_out_date}'
         return template.format(self)
     
+    # Dadus nebe haruka husi form public mai sei tama iha ne'e
 class Reservated(models.Model):
+    name = models.CharField(max_length=100)
+    sex = models.CharField(max_length=10)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)  # Harus ada ForeignKey ke Room
+    check_in_date = models.DateField()
+    check_out_date = models.DateField()
+
+
+# Wainhira Data iha reservation ita muda ba report  mak nia sei mai iha model ne'e
+class ReservateReport(models.Model):
     name = models.CharField(max_length=100)
     sex = models.CharField(max_length=10)
     email = models.EmailField()
@@ -84,7 +96,6 @@ class RoomPrice(models.Model):
 class Amenitiess(models.Model):
     titulu = models.CharField(max_length=50)
     deskrisaun = models.TextField()
-    imajen = models.ImageField(upload_to='amenity')
     publication_date = models.DateTimeField(auto_now_add=True)
     last_updated_date = models.DateTimeField(auto_now=True)
     status_choices = [
@@ -96,5 +107,4 @@ class Amenitiess(models.Model):
 
     
     def __str__(self):
-        template = '{0.titulu},{0.deskrisaun}'
-        return template.format(self)
+        return self.title

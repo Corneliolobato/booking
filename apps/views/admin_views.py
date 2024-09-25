@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from apps.models import Guest, Room, Reservation, Reservated, RoomOccupied, Amenitiess
+from apps.models import Guest, Room, Reservation, Reservated, RoomOccupied, Amenitiess, ReservateReport
 from django.utils import timezone
 from rest_framework import viewsets
 
@@ -13,6 +13,7 @@ from django.contrib.auth.models import User
 # Create your views here.
 @login_required
 def Home(request):
+    
     context = {
         'title': 'Home',
     }
@@ -102,15 +103,26 @@ def AdminDashboard(request):
     total_guest = Guest.objects.count()
     total_room = Room.objects.count()
     total_reservated = Reservated.objects.count()
+        # Count male and female guests
+    male_count = Guest.objects.filter(sex='Male').count()
+    female_count = Guest.objects.filter(sex='Female').count()
+
+
+
+    
     context = {
         'title': 'Dashboard',
         'tguest': total_guest,
         'troom': total_room,
         'today': today,
-        'treservated':total_reservated
+        'treservated':total_reservated,
+        'male_count': male_count,        # Add male count to context
+        'female_count': female_count,
         
     }
     return render(request, 'admin/dashboard.html',context)
+
+
 
 @login_required
 def AdminGuest(request):
@@ -285,22 +297,18 @@ def AdminAmenityDelete(request, id):
     return redirect('admin-amenity')
 
 
-
-
 @login_required
 def AdminLoadUpdateForm(request):
-	if request.method == 'GET':
-		object_id = request.GET.get('objectID')
-		objects = get_object_or_404(Amenitiess,id=object_id)
-		form = AmenitiesForm(instance=objects)
-	context = {
-		'form':form,
-		'objects':objects,
-	}
-	return render(request,'admi/admin_load_form.html',context)
-
-
-
+    if request.method == 'GET':
+        object_id = request.GET.get('objectID')
+        objects = get_object_or_404(Amenitiess, id=object_id)
+        form = AmenitiesForm(instance=objects)
+        context = {
+            'form': form,
+            'object': objects,
+        }
+        # Return the form as a partial template for AJAX
+        return render(request, 'admin/admin_load_form.html', context)
 
 
 
@@ -329,7 +337,7 @@ def move_to_reservated(request, reservation_id):
     
     
     # Create a new entry in the Reservated table
-    Reservated.objects.create(
+    ReservateReport.objects.create(
         name=reservation.guest.name,  # Access the name from the Guest model
         sex=reservation.guest.sex,    # Access the sex from the Guest model
         email=reservation.guest.email, # Access the email from the Guest model
@@ -342,7 +350,7 @@ def move_to_reservated(request, reservation_id):
     # Delete the data from the Reservation table
     reservation.delete()
 
-    reservated = Reservated.objects.all()    
+    reservated = ReservateReport.objects.all()    
     # Redirect or provide a response after completion
     context ={
         'reservated' : reservated,
@@ -357,7 +365,7 @@ def move_to_reservated(request, reservation_id):
 @login_required
 def reservated_report(request):
     # Fetch all reservated entries
-    reservated_entries = Reservated.objects.all()
+    reservated_entries = ReservateReport.objects.all()
     
     # Pass the data to the template
     context = {
@@ -368,7 +376,7 @@ def reservated_report(request):
 
 @login_required
 def reservated_report_delete(request, id):
-    data_Reservated = Reservated.objects.get(id=id)
+    data_Reservated = ReservateReport.objects.get(id=id)
     data_Reservated.delete()
     return redirect('reservated-report')
 
@@ -447,46 +455,40 @@ import json
 @login_required
 def perform_amenity_action(request):
     if request.method == 'POST':
-        # Mendapatkan data dari POST
         checked_items = request.POST.get('checkedItems', '').strip()  # Menghilangkan spasi ekstra
-        action_type = request.POST.get('actionType')
 
-        # Cek apakah tidak ada data yang dipilih
         if not checked_items:
             messages.error(request, 'Oops! Ita boot seidauk hili dadus ruma.')
             return redirect('admin-amenity')
 
-        # Split IDs hanya jika ada checked items
+        action_type = request.POST.get('actionType')
         ids = checked_items.split(',')
 
-        # Proses tindakan berdasarkan tipe
-        if action_type == 'delete':
-            for i in ids:
-                data = get_object_or_404(Amenitiess, id=i)
-                data.delete()
-            messages.success(request, 'Dados Publikasaun nebe ita boot hili, Delete ona ho susesu!')
-            return redirect('admin-amenity')
-
-        elif action_type == 'publishCheckedPost':
-            for i in ids:
-                data = get_object_or_404(Amenitiess, id=i)
-                data.status = 'Published'
-                data.save()
-            messages.success(request, 'Dados Publikasaun nebe ita boot hili, publika ona ho susesu!')
-            return redirect('admin-amenity')
-
-        elif action_type == 'draftCheckedPost':
-            for i in ids:
-                data = get_object_or_404(Amenitiess, id=i)
-                data.status = 'Draft'
-                data.save()
-            messages.success(request, 'Dados Publikasaun nebe ita boot hili, draft ona ho susesu!')
-            return redirect('admin-amenity')
-
-        else:
+        # Validasi action_type
+        if action_type not in ['delete', 'publishCheckedPost', 'draftCheckedPost']:
             return JsonResponse({'error': 'Invalid action type.'}, status=400)
+
+        # Proses tindakan berdasarkan tipe
+        for i in ids:
+            post = get_object_or_404(Amenitiess, id=i)
+            if action_type == 'delete':
+                post.delete()
+            elif action_type == 'publishCheckedPost':
+                post.status = 'Published'
+                post.save()
+            elif action_type == 'draftCheckedPost':
+                post.status = 'Draft'
+                post.save()
+
+        # Pesan sukses untuk masing-masing tindakan
+        action_messages = {
+            'delete': 'Dados Publikasaun nebe ita boot hili, Delete ona ho susesu!',
+            'publishCheckedPost': 'Dados Publikasaun nebe ita boot hili, publika ona ho susesu!',
+            'draftCheckedPost': 'Dados Publikasaun nebe ita boot hili, draft ona ho susesu!'
+        }
+        messages.success(request, action_messages[action_type])
+        return redirect('admin-amenity')
 
     else:
         return JsonResponse({'error': 'Invalid request method.'}, status=405)
-    
-from django.http import JsonResponse
+

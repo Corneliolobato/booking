@@ -2,20 +2,19 @@
 
 {% block content %}
 
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
     <div class="col-sm-8">
         <div class="card shadow-lg pt-3 rounded text-center">
             <div class="card-body">
-                <small class="text-muted">
-                    <h2>Your booking was successful!</h2>
-                    <p>Thank you for booking with us. We look forward to your stay.</p> 
-                    <a class="btn btn-outline-primary btn-sm mt-3" href="{% url 'room' %}">
-                        Continue to Room Selection <i class="fa fa-arrow-circle-right"></i>
-                    </a>
-                </small>
+                <h2>Your booking was successful!</h2>
+                <p class="text-muted">Thank you for booking with us. We look forward to your stay.</p>
+                <a class="btn btn-outline-primary btn-sm mt-3" href="{% url 'room' %}">
+                    Continue to Room Selection <i class="fa fa-arrow-circle-right"></i>
+                </a>
             </div> <!-- end card-body -->
         </div> <!-- end card -->
     </div> <!-- end col -->
-</div> <!-- end row -->
+</div> <!-- end d-flex -->
+
 
 {% endblock %}

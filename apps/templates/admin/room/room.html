@@ -23,12 +23,12 @@
                         <a class="btn btn-sm btn-outline-info" href="{% url 'admin-room-form' %}"><i
                                 class="fa fa-plus-square">Rejistu Room</i></a>
                     </div>
-
+<div class="card-body">
                     <div class="breadcrumb">
                         {% for i in room %}
                         <div class="col-md-4 col-sm-6">
                             <div class="team-thumb"
-                                style="position: relative; box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);margin-top: 10px; border-radius: 10px;">
+                                style="position: relative; box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);margin-top: 20px; border-radius: 10px;">
                                 <div class="team-image" style="height: 200px; overflow: hidden;">
                                     {% if i.images %}
                                     <a href="{% url 'admin-room-update' i.id %}"><img src="{{ i.images.url }}"
@@ -42,11 +42,18 @@
                                     <span style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                                         <h4 style="margin-left: 5px;"><li class="fa fa-money"></li> {{ i.price }}</h4>
                                     </span>
+                                    <p style="margin-left: 5px"> Status: 
+                                        {% if i.status == 'available' %}
+                                            <span class="badge badge-success">Availabe</span>
+                                        {% else %}
+                                            <span class="badge badge-danger">Occupied</span>
+                                        {% endif %}
+                                    </p>
                                 </div>
                                 <div class="bg-dark" style="position: absolute; top: 0; left: 0;padding: 5px">
                                     {{ i.room_type }}
                                 </div>
-                                <div class="bg-dark" style="position: absolute; top: 0; right: 0;padding: 5px">
+                                <div class="bg-light" style="position: absolute; top: 0; right: 0;padding: 5px">
                                     <a class="btn btn-outline-danger btn-sm my-2" href="#" data-toggle="modal"
                                         data-target="#delete-{{ i.id }}">
                                         <li class="fa fa-trash"></li>
@@ -70,7 +77,7 @@
                         </div>
                         {% endfor %}
                     </div>
-
+                </div>
                 </div>
             </div>
         </div>

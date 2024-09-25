@@ -1,5 +1,5 @@
 {% extends 'admin/home.html' %}
-
+{% load static %}
 {% block content %}
 <div class="content-body">
 
@@ -32,9 +32,9 @@
                                     <table class="table table-striped table-bordered zero-configuration table-hover">
                                         <thead>
                                             <tr>
-                                                <th class="text-center"><input type="checkbox" onclick="checkedalldata(this);" /></th>
+                                                <th class="text-center"><input type="checkbox"
+                                                        onclick="checkedalldata(this);" /></th>
                                                 <th>No</th>
-                                                <th>Imajen</th>
                                                 <th>Titulu</th>
                                                 <th>Data Publikasaun</th>
                                                 <th>Publikasaun Ikus</th>
@@ -45,11 +45,11 @@
                                         <tbody>
                                             {% for i in amenity %}
                                             <tr>
-                                                
-                                                <td class="text-center"><input id="checkboxpostid" type="checkbox" name="postIdList" value="{{i.id}}"></td>
-                                                <td>{{ forloop.counter }}</td>  <!-- Menampilkan nomor baris -->
-                                                <td> <img src="{{ i.imajen.url }}" style="width: 50px;" alt=""></td>
-                                                
+
+                                                <td class="text-center"><input id="checkboxpostid" type="checkbox"
+                                                        name="postIdList" value="{{i.id}}"></td>
+                                                <td>{{ forloop.counter }}</td> <!-- Menampilkan nomor baris -->
+
                                                 <td>{{i.titulu}}</td>
 
                                                 <td width="15%">{{i.publication_date|date:"d-M-Y"}}</td>
@@ -59,47 +59,54 @@
 
                                                     <div class="d-flex justify-content-between">
                                                         <button id="updatePost-{{i.id}}" data-id="{{i.id}}"
-                                                            class="btn btn-sm btn-outline-success my-4" data-toggle="modal"
-                                                            data-target="#updateModal-{{ i.id }}"><i class="fa fa-edit"></i> Update
+                                                            class="btn btn-sm btn-outline-success my-4"
+                                                            data-toggle="modal" data-target="#updateModal-{{ i.id }}"><i
+                                                                class="fa fa-edit"></i> Update
                                                             ho
                                                             Modal</button>
-                
+
                                                         <a href="{% url 'admin-amenity-update' i.id %}"
-                                                            class="btn btn-sm btn-outline-success my-4"><i class="fa fa-edit"></i></a>
-                
+                                                            class="btn btn-sm btn-outline-success my-4"><i
+                                                                class="fa fa-edit"></i></a>
+
                                                         <a href="#" data-toggle="modal" data-target="#delete-{{ i.id}}"
-                                                            class="btn btn-sm btn-outline-danger my-4"><i class="fa fa-trash"></i></a>
+                                                            class="btn btn-sm btn-outline-danger my-4"><i
+                                                                class="fa fa-trash"></i></a>
                                                     </div>
                                                 </td>
                                             </tr>
+
                                             <div class="modal fade" id="delete-{{ i.id}}">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-body">
-                                                            Ita Boot hakarak hamoos dadus Publikasaun ho titulu {{data.title}}?
+                                                            Ita Boot hakarak hamoos dadus Publikasaun ho titulu
+                                                            {{i.titulu}}?
                                                         </div>
-                
+
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-danger"
                                                                 data-dismiss="modal">No</button>
-                                                            <a href="{% url 'admin-amenity-delete' i.id %}" class="btn btn-info">Yes</a>
+                                                            <a href="{% url 'admin-amenity-delete' i.id %}"
+                                                                class="btn btn-info">Yes</a>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                
+
                                             {% include 'admin/updateJQuery.html' %}
-                                            <div class="modal fade" id="updateModal-{{ i.id }}">
+                                            <div class="modal fade" id="updateModal-{{ i.id }}" tabindex="-1" aria-labelledby="updateModalLabel-{{ i.id }}" aria-hidden="true">
                                                 <div class="modal-dialog modal-lg">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            Formulario Update Dados Publikasaun {{ i.title }}?
+                                                            <h5 class="modal-title">Formulario Update Dados Publikasaun {{ i.titulu }}?</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
-                                                        <div id="laodedForm-{{i.id}}"></div>
+                                                        <div id="laodedForm-{{i.id}}" class="modal-body"></div> <!-- Ensure ID is consistent -->
                                                     </div>
                                                 </div>
                                             </div>
-                
+
                                             {% endfor %}
                                         </tbody>
                                     </table>
@@ -131,20 +138,18 @@
                                                     Ita Boot hakarak hamoos dadus Publikasaun sira nebe hili ona?
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Lae</button>
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Lae</button>
                                                     <button type="button" onclick="performAction('delete')"
                                                         class="btn btn-danger">Sim</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                        </tbody>
-                            
-                                    </table>
+
+
                                 </div>
-
-                                
-
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -152,5 +157,33 @@
         </div>
     </div>
 </div>
-</div>
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="{% static 'js/jquery.js' %}"></script>
+<script>
+    var $j = jQuery.noConflict();
+
+    // check all item
+    function checkedalldata(source) {
+        var checkboxes = document.querySelectorAll('input[id="checkboxpostid"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i] != source)
+                checkboxes[i].checked = source.checked;
+        }
+    }
+
+    function performAction(actionType) {
+        var checkedItems = document.querySelectorAll('input[name="postIdList"]:checked');
+        var ids = [];
+        checkedItems.forEach(function (item) {
+            ids.push(item.value);
+        });
+        document.getElementById('actionType').value = actionType;
+        // document.getElementById('checkedItems').value = JSON.stringify(ids);
+        document.getElementById('checkedItems').value = ids.join(',');
+        document.getElementById('actionForm').submit();
+    }
+</script>
+
+
 {% endblock %}

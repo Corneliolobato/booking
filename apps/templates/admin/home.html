@@ -157,32 +157,6 @@ $(document).ready( function () {
 
 <!-- check all data--------------------- -->
 
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-<script src="{% static 'js/jquery.js' %}"></script>
-<script>
-    var $j = jQuery.noConflict();
-
-    // check all item
-    function checkedalldata(source) {
-        var checkboxes = document.querySelectorAll('input[id="checkboxpostid"]');
-        for (var i = 0; i < checkboxes.length; i++) {
-            if (checkboxes[i] != source)
-                checkboxes[i].checked = source.checked;
-        }
-    }
-
-    function performAction(actionType) {
-        var checkedItems = document.querySelectorAll('input[name="postIdList"]:checked');
-        var ids = [];
-        checkedItems.forEach(function (item) {
-            ids.push(item.value);
-        });
-        document.getElementById('actionType').value = actionType;
-        // document.getElementById('checkedItems').value = JSON.stringify(ids);
-        document.getElementById('checkedItems').value = ids.join(',');
-        document.getElementById('actionForm').submit();
-    }
-</script>
 
 
     <script src="{% static 'assets/./js/dashboard/dashboard-1.js' %}"></script>

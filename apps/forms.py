@@ -102,7 +102,10 @@ class AmenitiesForm(forms.ModelForm):
         required=False, widget=SummernoteWidget(attrs={'summernote': {'width': '100%', 'height': '500px'}}))
     class Meta:
         model = Amenitiess
-        fields = ['titulu','deskrisaun','imajen']
+        fields = ['titulu','deskrisaun','status']
+        labels = {
+			'titulu':"Titulu"}
+            
 
 
 
@@ -110,22 +113,26 @@ class AmenitiesForm(forms.ModelForm):
 # public fields bookings
 
 class ReservatedForm(forms.ModelForm):
+    sex = forms.ChoiceField(
+        choices=Guest.sex_choices,  # Use choices from Guest model
+        required=True,
+        label="Hili Sexu"
+    )
+
     class Meta:
         model = Reservated
-        exclude = ['room']  # Hilangkan room dari form karena akan otomatis diisi dari view
+        exclude = ['room']  # The room will be set in the view
         widgets = {
             'check_in_date': forms.DateInput(attrs={'type': 'date'}),
             'check_out_date': forms.DateInput(attrs={'type': 'date'}),
         }
 
     def __init__(self, *args, **kwargs):
-        # Ambil tanggal check-in dan check-out dari kwargs jika ada
         check_in_date = kwargs.pop('check_in_date', None)
         check_out_date = kwargs.pop('check_out_date', None)
-        
         super().__init__(*args, **kwargs)
 
-        # Filter kamar yang sudah dipesan
+        # Filter available rooms based on the dates
         if check_in_date and check_out_date:
             self.fields['room'].queryset = Room.objects.filter(
                 status='available'
@@ -135,3 +142,7 @@ class ReservatedForm(forms.ModelForm):
                     check_out_date__gt=check_in_date
                 ).values_list('room_id', flat=True)
             )
+
+    def clean_sex(self):
+        sex = self.cleaned_data.get('sex')
+        return sex.capitalize()  # Ensure 'Male' or 'Female'

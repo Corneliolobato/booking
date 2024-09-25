@@ -39,7 +39,7 @@
                 
                         <div class="col-sm-6 form-group">
                             {% csrf_token %}
-                            {{ form.as_p }}
+                            {{ form|crispy }}
                             <button type="submit" class="btn btn-primary">Book Now</button>
                         </div>
 

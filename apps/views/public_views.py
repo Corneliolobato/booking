@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from apps.models import Amenitiess,Room
 from apps.forms import ReservatedForm,Reservation,Guest
+from django.contrib import messages
 # from main.models import *
 
 
@@ -50,18 +51,22 @@ def room_detail(request, room_id):
     if request.method == 'POST':
         form = ReservatedForm(request.POST)
         if form.is_valid():
-            # Save Reservated form and create a Reservation instance
             reservated_instance = form.save(commit=False)
             reservated_instance.room = room  # Assign the selected room
             reservated_instance.save()
 
-            # Create a Reservation entry in the system
+            # Create or get the guest instance
             guest, created = Guest.objects.get_or_create(
                 name=reservated_instance.name,
                 email=reservated_instance.email,
-                phone=reservated_instance.phone
+                phone=reservated_instance.phone,
+                defaults={'sex': reservated_instance.sex.capitalize()}
             )
+            # Add a success message for the admin
+            messages.success(request, 'New reservation created by ' + reservated_instance.name)
 
+
+            # Create a Reservation entry
             Reservation.objects.create(
                 guest=guest,
                 room=room,
@@ -77,7 +82,6 @@ def room_detail(request, room_id):
     context = {
         'form': form,
         'room': room
-        
     }
     return render(request, 'detail_room.html', context)
 

@@ -31,7 +31,7 @@ urlpatterns = [
     path('admin-amenity-delete/<str:id>', AdminAmenityDelete, name='admin-amenity-delete'),
 
 
-    path('admin-amenity/load-post-update-form', AdminLoadUpdateForm, name='load-amen-update-form'),
+    path('load-amenity-update-form/', AdminLoadUpdateForm, name='load-amenity-update-form'),
     path('perform_amenity_action/', perform_amenity_action, name='perform_amen_action'),
 
     path('admin-staff/', AdminStaff, name='admin-staff'),
