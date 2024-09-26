@@ -11,6 +11,7 @@ urlpatterns = [
 
 
     path('admin-panel/', Home, name='admin-panel'),
+    path('admin-notif/', Notifications, name='admin-notif'),
     path('admin-dashboard/', AdminDashboard, name='admin-dashboard'),
 
     path('admin-guest/', AdminGuest, name='admin-guest'),

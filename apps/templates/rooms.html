@@ -5,7 +5,25 @@
 {% block content %}
 
 
+<style>
+  .uniform-img {
+    width: 100%; /* Sesuaikan lebar gambar dengan lebar grid */
+    height: 300px; /* Atur tinggi gambar sesuai kebutuhan */
+    object-fit: cover; /* Agar gambar tidak terdistorsi dan tetap proporsional */
+}
+.custom-card {
+    border-radius: 15px; /* Membuat sudut melengkung */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bayangan halus */
+    overflow: hidden; /* Menghindari konten keluar dari border radius */
+    transition: box-shadow 0.3s ease-in-out; /* Animasi transisi */
+}
 
+.custom-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Bayangan lebih tebal saat hover */
+}
+
+
+</style>
 
     <section class="site-section">
       <div class="container">
@@ -13,23 +31,22 @@
           {% for i in room %}
         
           <div class="col-md-4 mb-4">
-            <div class="media d-block room mb-0">
-              <figure>
-                <img src="{{i.images.url}}" alt="Generic placeholder image" class="img-fluid">
-                <div class="overlap-text">
+            <div class="media d-block room mb-0 custom-card">
+                <figure>
+                    <img src="{{i.images.url}}" alt="Room Image" class="img-fluid uniform-img">
+                </figure>
+                <div class="media-body">
+                    <h3 class="mt-0"><a href="#">{{i.room_type}}</a></h3>
+                    <ul class="room-specs">
+                        <li><span class="ion-ios-people-outline"></span> 2 Guests</li>
+                        <li><span class="ion-ios-dollar"></span>{{i.price}} / 24 hours</li>
+                        <li><span class="ion-ios-dollar"></span>Room Number {{i.room_number}}</li>
+                    </ul>
+                    <p><a href="{% url 'detailroom' i.id %}" class="btn btn-primary btn-sm">Book Now</a></p>
                 </div>
-              </figure>
-              <div class="media-body">
-                <h3 class="mt-0"><a href="#">{{i.room_type}}</a></h3>
-                <ul class="room-specs">
-                  <li><span class="ion-ios-people-outline"></span>2 Guests</li>
-                  <li><span class="ion-ios-dolar"></span>{{i.price}} / 24 hours</li>
-                  <li><span class="ion-ios-dolar"></span>Room Number {{i.room_number}}</li>
-                </ul>
-                <p><a href="{% url 'detailroom' i.id %}" class="btn btn-primary btn-sm">Book Now </a></p>
-              </div>
             </div>
-          </div>
+        </div>
+        
           {% endfor %}
         </div>
       </div>

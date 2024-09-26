@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User
+from django.db.models import Count
 
 
 # Create your views here.
@@ -94,6 +95,16 @@ def AdminChangeAccount(request):
 
 class RoomViewSet(viewsets.ModelViewSet):
     queryset = Room.objects.all()
+
+
+@login_required  
+def Notifications(request):
+    reservated = Reservated.objects.count()
+
+    context = {
+        'notifications':reservated,
+    }
+    return render(request, 'admin/navheader.html',context)
     
 
 
@@ -102,14 +113,12 @@ def AdminDashboard(request):
     today = timezone.now().date()
     total_guest = Guest.objects.count()
     total_room = Room.objects.count()
-    total_reservated = Reservated.objects.count()
+    total_reservated = ReservateReport.objects.count()
         # Count male and female guests
     male_count = Guest.objects.filter(sex='Male').count()
     female_count = Guest.objects.filter(sex='Female').count()
 
 
-
-    
     context = {
         'title': 'Dashboard',
         'tguest': total_guest,
@@ -117,7 +126,8 @@ def AdminDashboard(request):
         'today': today,
         'treservated':total_reservated,
         'male_count': male_count,        # Add male count to context
-        'female_count': female_count,
+        'female_count': female_count,  
+    
         
     }
     return render(request, 'admin/dashboard.html',context)

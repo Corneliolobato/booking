@@ -3,30 +3,43 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
+<style>
+    .custom-room {
+    border-radius: 15px; /* Membuat sudut melengkung */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bayangan halus */
+    overflow: hidden; /* Mencegah konten keluar dari border */
+    transition: box-shadow 0.3s ease-in-out; /* Transisi halus pada hover */
+}
+
+.custom-room:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Bayangan lebih besar saat di-hover */
+}
+
+</style>
+
 <section class="site-section">
     <div class="container">
         <div class="row">
 
             <div class="col-md-4 mb-4">
-                <div class="media d-block room mb-0">
+                <div class="media d-block room mb-0 custom-room">
                     <figure>
                         <img src="{{room.images.url}}" alt="Generic placeholder image" class="img-fluid">
-                        <div class="overlap-text">
-                        </div>
+                        <div class="overlap-text"></div>
                     </figure>
                     <div class="media-body">
                         <h3 class="mt-0"><a href="#">{{room.room_type}}</a></h3>
                         <ul class="room-specs">
                             <li><span class="ion-ios-people-outline"></span> 2 Guests</li>
-                            <li><span class="ion-ios-dolar"></span>{{room.price}} / 24 hours<sup></sup></li>
+                            <li><span class="ion-ios-dollar"></span>{{room.price}} / 24 hours</li>
                         </ul>
                         <ul class="room-specs">
                             <li><span class="ion-ios-money"></span>Room Number {{room.room_number}}</li>
                         </ul>
-
                     </div>
                 </div>
             </div>
+            
 
         </div>
 
@@ -49,8 +62,11 @@
                     
                 </form>
                 {% else %}
-                <p class="text-danger">Kuartu Okupadu, Favor buka fali Kuartu Seluk Obrigadu!</p>
-                {% endif %}
+                <div class="alert alert-danger d-flex align-items-center" role="alert" style="font-style: italic;">
+                    <i class="fa fa-exclamation-triangle me-2" aria-hidden="true"> </i> Kuartu Okupadu, Favor buka fali Kuartu Seluk Obrigadu!
+                </div>
+            {% endif %}
+            
             </div>
     </div>
 </section>

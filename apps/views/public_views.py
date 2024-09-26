@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from apps.models import Amenitiess,Room
-from apps.forms import ReservatedForm,Reservation,Guest
+from apps.models import Amenitiess,Room,Reservation,Guest,Reservated
+from apps.forms import ReservatedForm
 from django.contrib import messages
 # from main.models import *
 
@@ -37,24 +37,28 @@ def PublicRoom(request):
     dados_room = Room.objects.all()
     print(dados_room)
     context = {
-        'title' : "portfolio",
+        'title' : "Rooms ",
         'portfolio_active': "active",
         'room' : dados_room
         
     }
     return render(request, 'rooms.html',context)
 
-
 def room_detail(request, room_id):
     room = get_object_or_404(Room, id=room_id)
     
     if request.method == 'POST':
         form = ReservatedForm(request.POST)
-        if form.is_valid():
-            reservated_instance = form.save(commit=False)
-            reservated_instance.room = room  # Assign the selected room
-            reservated_instance.save()
-
+        
+        # Create a Reservated instance but do not save yet
+        reservated_instance = form.save(commit=False)
+        
+        # Assign the selected room to the reservated_instance
+        reservated_instance.room = room  # Assign the selected room
+        
+        if form.is_valid():  # Check if the form is valid
+            reservated_instance.save()  # Save the Reservated instance
+            
             # Create or get the guest instance
             guest, created = Guest.objects.get_or_create(
                 name=reservated_instance.name,
@@ -62,9 +66,9 @@ def room_detail(request, room_id):
                 phone=reservated_instance.phone,
                 defaults={'sex': reservated_instance.sex.capitalize()}
             )
-            # Add a success message for the admin
-            messages.success(request, 'New reservation created by ' + reservated_instance.name)
 
+            # Add a success message
+            messages.success(request, f'New reservation created by {reservated_instance.name}')
 
             # Create a Reservation entry
             Reservation.objects.create(
@@ -74,14 +78,19 @@ def room_detail(request, room_id):
                 check_out_date=reservated_instance.check_out_date
             )
 
+            # Mark the room as occupied
+            room.status = 'occupied'  # Assuming 'occupied' is the status for booked rooms
+            room.save()
+
             # Redirect to success page
             return redirect('booking_success')
     else:
-        form = ReservatedForm()
+        form = ReservatedForm()  # Create an empty form for GET request
 
     context = {
         'form': form,
-        'room': room
+        'room': room,
+        'title': "Details"
     }
     return render(request, 'detail_room.html', context)
 
